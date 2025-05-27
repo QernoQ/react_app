@@ -56,6 +56,20 @@ export enum CategoryTypeEnum {
     clashRoyale = "Clash Royale",
     brawlStars = "Brawl Stars",
     baldurgate = "Baldur`s Gate 3",
+    diablo2 = "Diablo II",
+    dayz = "DayZ",
+    stellaris = "Stellaris",
+    farmingSimulator = "Farming Simulator",
+    superMario = "Super Mario",
+    residentEvil = "Resident Evil",
+    gta = "Grand Theft Auto",
+    itTakesTwo = "It Takes Two",
+    tekken = "Tekken",
+    hitman = "Hitman",
+    hogwartsLegacy = "Hogwarts Legacy",
+    metin2 = "Metin2",
+    euroTruckSimulator = "Euro Truck Simulator",
+    assassinsCreed = "Assassin's Creed"
   }
 
   export enum LanguageEnum {
@@ -90,9 +104,47 @@ export enum CategoryTypeEnum {
     tamil = "Tamilski",
     telugu = "Telugu"
   }
+export enum TagEnum {
+  fps = "FPS",
+  moba = "MOBA",
+  battleRoyale = "Battle Royale",
+  rpg = "RPG",
+  mmorpg = "MMORPG",
+  tps = "Third-Person Shooter",
+  sandbox = "Sandbox",
+  casual = "Casual",
+  competitive = "Competitive",
+  action = "Action",
+  strategy = "Strategy",
+  survival = "Survival",
+  horror = "Horror",
+  simulation = "Simulation",
+  racing = "Racing",
+  sports = "Sports",
+  card = "Card Game",
+  fighting = "Fighting",
+  indie = "Indie",
+  platformer = "Platformer",
+  rhythm = "Rhythm",
+  storyRich = "Story Rich",
+  openWorld = "Open World",
+  sciFi = "Sci-Fi",
+  fantasy = "Fantasy",
+  coOp = "Co-op",
+  shooter = "Shooter",
+  roguelike = "Roguelike",
+  stealth = "Stealth",
+  educational = "Educational",
+  creative = "Creative",
+  music = "Music",
+  irl = "IRL",
+  tactical = "Tactical",
+  autobattler = "Auto Battler",
+  party = "Party",
+  gore = "Gore",
+  teamfightTactics = "TFT"
+}
 
-  export enum TagEnum {
-    fps = "FPS",
-  }
+
 
   

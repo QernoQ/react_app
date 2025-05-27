@@ -4,13 +4,33 @@ import "../styles/appstyle.css";
 import { Outlet } from 'react-router';
 import { useState, useEffect } from 'react';
 import { Nav, InputGroup, Form, NavDropdown, Button, Container } from 'react-bootstrap';
-import { gameData } from "~/data/GameData";
+import { originalStreams } from "~/data/streamerData";
+import SidebarItem from '~/components/SidebarItem';
+import { type GamesPanels, type StreamerPanels } from "~/data/livePanel";
+import { gameData } from '~/data/gameData';
 
 export default function Layout() {
     const [search, setSearch] = useState('');
     const [open, setOpen] = useState(true);
     const [dark, setDark] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
+
+    function shuffleArray<T>(array: T[]): T[] {
+        const result = [...array];
+        for (let i = result.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [result[i], result[j]] = [result[j], result[i]];
+        }
+        return result;
+    }
+    const [shuffledStreams, setShuffledStreams] = useState<StreamerPanels[]>([]);
+    const [shuffledGames, setShuffledGames] = useState<GamesPanels[]>([]);
+
+    useEffect(() => {
+        setShuffledStreams(shuffleArray(originalStreams));
+        setShuffledGames(shuffleArray(gameData));
+    }, []);
+
     //zapiuje na dysku
     useEffect(() => {
         const stored = localStorage.getItem("darkMode");
@@ -104,38 +124,27 @@ export default function Layout() {
                     </Button>
                 )}
 
-                <div className="flex-grow-1 overflow-auto">
-                    {gameData.map((category, index) => (
-                        <div
+                    {shuffledStreams.map((stream, index) => (
+                        <SidebarItem
                             key={index}
-                            className="d-flex align-items-center p-2 sidebar-item"
-                        >
-                            <div
-                                className="d-flex align-items-center justify-content-center flex-shrink-0 rounded-circle"
-                                style={{
-                                    width: '40px',
-                                    height: '40px',
-                                    backgroundColor: category.gameImage,
-                                    fontSize: '18px',
-                                }}
-                            />
-                            {open && !isMobile && (
-                                <span className="ms-3 text-truncate" style={{ fontSize: '14px' }}>
-                                    {category.gameName}
-                                </span>
-                            )}
-                        </div>
+                            avatar={stream.avatar}
+                            streamerName={stream.streamerName}
+                            viewers={stream.viewers}
+                            category={stream.category}
+                            isOpen={open}
+                            isMobile={isMobile}
+                        />
                     ))}
-                </div>
-            </div>
+            </div >
 
             <div style={{
                 marginLeft: `${sidebarWidth}px`,
                 transition: 'margin-left 0.3s ease',
                 padding: '1rem',
             }}>
-                <Outlet context={{ dark }} />
+                <Outlet context={{ dark, shuffledStreams, shuffledGames }} />
             </div>
         </>
     );
+
 }

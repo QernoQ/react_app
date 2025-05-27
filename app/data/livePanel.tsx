@@ -7,14 +7,15 @@ export type StreamerPanels = {
     viewers: number;
     category: CategoryTypeEnum;
     language: LanguageEnum;
-    image: string;
+    video: string;
+    avatar: string;
 }
 
 export type GamesPanels = {
     gameImage: string;
     gameName: CategoryTypeEnum;
     gameViewers: number;
-    gameTags: TagEnum;
+    gameTags: TagEnum[];
 
 }
 export type ContextType = {
