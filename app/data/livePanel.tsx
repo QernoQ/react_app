@@ -17,3 +17,6 @@ export type GamesPanels = {
     gameTags: TagEnum;
 
 }
+export type ContextType = {
+  dark: boolean;
+};

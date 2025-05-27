@@ -1,39 +1,54 @@
 import { useEffect, useState } from "react";
 import { InputGroup, Form, Row, Col, Card } from "react-bootstrap";
-import type { StreamerPanels, GamesPanels } from "~/data/livePanel";
+import type { StreamerPanels, GamesPanels, ContextType } from "~/data/livePanel";
 import { originalStreams } from "~/data/streamerData";
 import { gameData } from "~/data/GameData"
+import { useOutletContext } from "react-router";
+
 
 const panelList = () => {
+    const { dark } = useOutletContext<ContextType>();
     const [streamPanel, setStreamPanel] = useState<StreamerPanels[]>([]);
     const [shuffledStreams, setShuffledStreams] = useState<StreamerPanels[]>([]);
     const [visibleCount, setVisibleCount] = useState(4);
+    const [visibleCount2, setVisibleCount2] = useState(6);
     const [gamePanel, setGamePanel] = useState<GamesPanels[]>([]);
+    const [shuffledCategory, setShuffledCategory] = useState<GamesPanels[]>([]);
     //const [search, setSearch] = useState('');
+        function shuffleArray<T>(array: T[]): T[] {
+        const result = [...array];
+        for (let i = result.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [result[i], result[j]] = [result[j], result[i]];
+        }
+        return result;
+    }
+
 
     useEffect(() => {
         setGamePanel(gameData);
-     }, []);
+        const category = shuffleArray(gameData);
+        setShuffledCategory(category);
+    }, []);
 
     useEffect(() => {
         setStreamPanel(originalStreams);
-        const shuffled = [...originalStreams];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
+        const shuffled = shuffleArray(originalStreams);
         setShuffledStreams(shuffled);
     }, []);
+
     const visibleStreams = shuffledStreams.slice(0, visibleCount);
+    const visibleCategories = shuffledCategory.slice(0,visibleCount2)
 
     return (
-        <div className="container text-center">
+        <div className={`container-fluid text-center ${dark ? "panel-dark" : "panel-light"}`}>
             <div className="col-12">
 
             </div>
-            <Row id="streamerPanel">
+            <h2>Live on Twitch</h2>
+            <Row id="streamerPanel" className={dark ? "panel-dark" : "panel-light"}>
                 {visibleStreams.map((item, index) => (
-                    <Col md={3} key={index} className="mb-2">
+                    <Col xs={12} sm={6} md={3} key={index} className="mb-2">
                         <div className="card equal-card">
                             <Card.Img
                                 variant="top"
@@ -51,7 +66,7 @@ const panelList = () => {
                     </Col>
                 ))}
             </Row>
-            {visibleCount < 8 && (
+            {visibleCount < 6 && (
                 <div className="mt-3">
                     <button
                         className="btn btn-primary"
@@ -67,9 +82,10 @@ const panelList = () => {
                     </button>
                 </div>
             )}
-            <Row id="gameCategory">
-                {gamePanel.map((game, index) => (
-                    <Col md={2} key={index} className="mb-2">
+            <h2>Categories we think you’ll like</h2>
+            <Row id="gameCategory" className={dark ? "panel-dark" : "panel-light"}>
+                {visibleCategories.map((game, index) => (
+                    <Col xs={6} sm={4} md={2} lg={2}  key={index} className="mb-2">
                         <div className="card equal-card">
                             <Card.Img
                                 variant="top"
