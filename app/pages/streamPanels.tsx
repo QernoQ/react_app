@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { InputGroup, Form, Row, Col, Card } from "react-bootstrap";
 import type { StreamerPanels, GamesPanels, ContextType } from "~/data/livePanel";
 import { useOutletContext } from "react-router";
-import StreamerCard from "~/components/StreamerCard.tsx";
+import StreamerCard from "../components/StreamerCard";
 const PanelList = () => {
     const { shuffledStreams, shuffledGames, dark } = useOutletContext<{
         shuffledStreams: StreamerPanels[];
