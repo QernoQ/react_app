@@ -110,7 +110,7 @@ export enum TagEnum {
   battleRoyale = "Battle Royale",
   rpg = "RPG",
   mmorpg = "MMORPG",
-  tps = "Third-Person Shooter",
+  tps = "3P Shooter",
   sandbox = "Sandbox",
   casual = "Casual",
   competitive = "Competitive",

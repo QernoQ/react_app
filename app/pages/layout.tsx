@@ -2,12 +2,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "../styles/appstyle.css";
 
 import { Outlet } from 'react-router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useMemo } from 'react';
 import { Nav, InputGroup, Form, NavDropdown, Button, Container } from 'react-bootstrap';
 import { originalStreams } from "~/data/streamerData";
 import SidebarItem from '~/components/SidebarItem';
 import { type GamesPanels, type StreamerPanels } from "~/data/livePanel";
 import { gameData } from '~/data/gameData';
+import SearchInput from "~/components/SearchInput";
+import DarkModeSwitch from "~/components/DarkModeSwitch";
+import LiveChannelsButton from "~/components/LiveChannelsButton";
 
 export default function Layout() {
     const [search, setSearch] = useState('');
@@ -23,13 +26,9 @@ export default function Layout() {
         }
         return result;
     }
-    const [shuffledStreams, setShuffledStreams] = useState<StreamerPanels[]>([]);
-    const [shuffledGames, setShuffledGames] = useState<GamesPanels[]>([]);
 
-    useEffect(() => {
-        setShuffledStreams(shuffleArray(originalStreams));
-        setShuffledGames(shuffleArray(gameData));
-    }, []);
+    const shuffledStreams = useMemo(() => shuffleArray(originalStreams), [originalStreams]);
+    const shuffledGames = useMemo(() => shuffleArray(gameData), [gameData]);
 
     //zapiuje na dysku
     useEffect(() => {
@@ -41,7 +40,7 @@ export default function Layout() {
     //zmienia wielkosc jak jest wielkosci telefonu
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 768);
+            setIsMobile(window.innerWidth < 1200);
         };
 
         handleResize();
@@ -68,31 +67,13 @@ export default function Layout() {
                             <Nav.Link eventKey="link-1">Link</Nav.Link>
                         </Nav.Item>
                         <Nav.Item className="flex-grow-1 my-2 mx-2">
-                            <InputGroup>
-                                <Form.Control
-                                    aria-label="Search"
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    placeholder="Search games..."
-                                />
-                                <InputGroup.Text>🔎</InputGroup.Text>
-                            </InputGroup>
+                            <SearchInput value={search} onChange={setSearch} />
                         </Nav.Item>
                         <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">🌙 Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">🌙 Another action</NavDropdown.Item>
                             <NavDropdown.Item as="div" className="d-flex align-items-center">
-                                <Form className="d-flex align-items-center ">
-                                    <label htmlFor="darkmode-switch" className="me-3 mb-0">🌙 Dark Theme</label>
-                                    <Form.Check
-                                        type="switch"
-                                        id="darkmode-switch"
-                                        checked={dark}
-                                        onChange={() => setDark(prev => !prev)}
-                                        label=""
-                                        className="m-0"
-                                    />
-                                </Form>
+                                <DarkModeSwitch dark={dark} toggleDark={() => setDark(prev => !prev)} />
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
@@ -114,27 +95,22 @@ export default function Layout() {
                 }}
             >
                 {!isMobile && (
-                    <Button
-                        onClick={() => setOpen(!open)}
-                        className="align-self-end m-2"
-                        size="sm"
-                        variant={dark ? "outline-light" : "outline-dark"}
-                    >
-                        {open ? '◀' : '▶'}
-                    </Button>
+                    <LiveChannelsButton
+                        toggleSidebar={() => setOpen(prev => !prev)}
+                    />
                 )}
 
-                    {shuffledStreams.map((stream, index) => (
-                        <SidebarItem
-                            key={index}
-                            avatar={stream.avatar}
-                            streamerName={stream.streamerName}
-                            viewers={stream.viewers}
-                            category={stream.category}
-                            isOpen={open}
-                            isMobile={isMobile}
-                        />
-                    ))}
+                {shuffledStreams.map((stream, index) => (
+                    <SidebarItem
+                        key={index}
+                        avatar={stream.avatar}
+                        streamerName={stream.streamerName}
+                        viewers={stream.viewers}
+                        category={stream.category}
+                        isOpen={open}
+                        isMobile={isMobile}
+                    />
+                ))}
             </div >
 
             <div style={{
@@ -142,7 +118,11 @@ export default function Layout() {
                 transition: 'margin-left 0.3s ease',
                 padding: '1rem',
             }}>
-                <Outlet context={{ dark, shuffledStreams, shuffledGames }} />
+                <Outlet context={{
+                    dark,
+                    shuffledStreams,
+                    shuffledGames,
+                }} />
             </div>
         </>
     );

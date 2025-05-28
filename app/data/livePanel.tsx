@@ -9,6 +9,7 @@ export type StreamerPanels = {
     language: LanguageEnum;
     video: string;
     avatar: string;
+    image: string;
 }
 
 export type GamesPanels = {
