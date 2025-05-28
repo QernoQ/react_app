@@ -1,33 +1,47 @@
-import React from 'react';
-import { Col } from "react-bootstrap"; 
-import type { StreamerPanels } from "~/data/livePanel"; 
+import React, { useState } from 'react';
+import { Col, Card } from "react-bootstrap";
+import type { StreamerPanels } from "~/data/livePanel";
 
-type Props = {
+interface StremerCardProps {
     item: StreamerPanels;
     dark: boolean;
 };
 
-const StreamerCard: React.FC<Props> = ({ item, dark }) => { 
+const StreamerCard: React.FC<StremerCardProps> = ({ item, dark }) => {
+    const [borderColor, setBorderColor] = useState('transparent');
+    const getRandomColor = () => {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    };
+
+    const handleMouseEnter = () => {
+        setBorderColor(getRandomColor());
+    };
+
+    const handleMouseLeave = () => {
+        setBorderColor('transparent');
+    };
     return (
-        <Col xs={12} sm={6} md={3} className="mb-2">
+        <Col xs={12} sm={6} md={6} lg={6} xxl={3} className="mb-2 mt-2">
             <div className={`card equal-card ${dark ? "panel-dark" : "panel-light"}`}>
                 <div className="position-relative" style={{ height: "196px", overflow: "hidden" }}>
-                    <video
-                        src={item.video}
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                        controls
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        onError={(e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
-                            console.error(`Video failed to load for ${item.streamerName}:`, e.currentTarget.src, e);
+                    <Card.Img
+                        src={item.image}
+                        style={{
+                            border: `6px solid ${borderColor}`,
+                            transition: 'border 0.3s ease',
+                            cursor: 'pointer',
                         }}
-                    >
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                            >
 
+                    </Card.Img>
+                </div>
                 <div className="d-flex align-items-center gap-2 p-2">
                     <div
                         className="rounded-circle overflow-hidden flex-shrink-0"
@@ -46,6 +60,7 @@ const StreamerCard: React.FC<Props> = ({ item, dark }) => {
                                 objectFit: 'cover',
                                 display: 'block',
                             }}
+
                         />
                     </div>
 
@@ -53,14 +68,8 @@ const StreamerCard: React.FC<Props> = ({ item, dark }) => {
                         <div className="d-flex justify-content-between align-items-center">
                             <span className="fw-bold"> {item.streamerName} </span>
                             <span className="d-flex align-items-center gap-2">
-                                <span style={{
-                                    width: '8px',
-                                    height: '8px',
-                                    borderRadius: '50%',
-                                    backgroundColor: 'red',
-                                    display: 'inline-block',
-                                }} />
                                 <span>Live</span>
+                                //DODAC TYTUŁ
                             </span>
                         </div>
                     </div>

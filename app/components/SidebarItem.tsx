@@ -48,11 +48,13 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         />
       </div>
 
-      {isOpen && !isMobile && (
-        <div className="ms-3 w-100">
+      {!isMobile && (
+        <div
+          className={`ms-3 w-100 sidebar-details ${isOpen ? "open" : "closed"}`}
+        >
           <div className="d-flex align-items-center justify-content-between">
             <span>{streamerName}</span>
-            <span className="d-flex align-items-center gap-2 justify-conent-space-evenly">
+            <span className="d-flex align-items-center gap-2">
               <span
                 style={{
                   width: '8px',
@@ -70,6 +72,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           </div>
         </div>
       )}
+
     </div>
   );
 };
