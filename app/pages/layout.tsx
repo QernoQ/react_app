@@ -1,8 +1,8 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "../styles/appstyle.css";
+
 
 import { Outlet } from 'react-router';
-import { useState, useEffect,useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
 import { Nav, InputGroup, Form, NavDropdown, Button, Container } from 'react-bootstrap';
 import { originalStreams } from "~/data/streamerData";
 import SidebarItem from '~/components/SidebarItem';
@@ -17,6 +17,7 @@ export default function Layout() {
     const [open, setOpen] = useState(true);
     const [dark, setDark] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
+    const navigate = useNavigate();
 
     function shuffleArray<T>(array: T[]): T[] {
         const result = [...array];
@@ -28,7 +29,17 @@ export default function Layout() {
     }
 
     const shuffledStreams = useMemo(() => shuffleArray(originalStreams), [originalStreams]);
+    const [visibleCountStream, setVisibleCount] = useState(13);
     const shuffledGames = useMemo(() => shuffleArray(gameData), [gameData]);
+    const SidebarStreams = shuffledStreams.slice(0, visibleCountStream);
+    const [logoScale, setLogoScale] = useState('scale(1)');
+    const [browseScale, setBrowseScale] = useState('18px');
+
+    const filteredStreams = originalStreams.filter(item =>
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.streamerName.toLowerCase().includes(search.toLowerCase())
+    );
+
 
     //zapiuje na dysku
     useEffect(() => {
@@ -54,20 +65,57 @@ export default function Layout() {
     }, [dark]);
 
     const sidebarWidth = isMobile ? 60 : (open ? 280 : 60);
+    const handleMouseEnter = () => {
+        setLogoScale('scale(1.2)');
+    };
+
+    const handleMouseLeave = () => {
+        setLogoScale('scale(1)');
+    };
+    const handleMouseEnter2 = () => {
+        setBrowseScale('20px');
+    };
+
+    const handleMouseLeave2 = () => {
+        setBrowseScale('18px');
+    };
 
     return (
         <>
             <header className={`p-3 ${dark ? "bg-dark" : "bg-light"} sticky-top shadow-sm`} style={{ zIndex: 1050 }}>
                 <Container fluid>
-                    <Nav className="align-items-center flex-wrap">
-                        <Nav.Item>
-                            <Nav.Link onClick={() => !isMobile && setOpen(!open)}>☰</Nav.Link>
+                    <Nav className="align-items-center flex-wrap justify-content-center">
+                        <Nav.Item className='' onClick={() => navigate('/')}>
+                            <img
+                                src="https://i.imgur.com/QEjtBUF.png"
+                                alt="LOGO"
+                                style={{
+                                    width: '53px',
+                                    height: '33px',
+                                    marginRight: '8px',
+                                    transform: `${logoScale}`,
+                                    cursor: 'pointer',
+                                }}
+                                onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}
+                            />
+                        </Nav.Item>
+                        <Nav.Item onClick={() => navigate('browse')}>
+                            <span
+                                style={{
+                                    marginRight: '16px',
+                                    transition: 'font 0.3s ease',
+                                    fontSize: `${browseScale}`,
+                                    cursor: 'pointer',
+                                }}
+                                onMouseEnter={handleMouseEnter2}
+                                onMouseLeave={handleMouseLeave2}>Browse</span>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="link-1">Link</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item className="flex-grow-1 my-2 mx-2">
-                            <SearchInput value={search} onChange={setSearch} />
+                            <SearchInput
+                                value={search}
+                                onChange={setSearch}
+                            />
                         </Nav.Item>
                         <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">🌙 Action</NavDropdown.Item>
@@ -84,7 +132,7 @@ export default function Layout() {
 
             {/* Sidebar */}
             <div
-                className={`d-flex flex-column position-fixed vh-100 pt-5 ${dark ? "bg-dark text-white" : "bg-light text-dark sidebar-light"}`}
+                className={`d-flex flex-column position-fixed vh-100 pt-3 ${dark ? "bg-dark text-white" : "bg-light text-dark"}`}
                 style={{
                     top: '64px',
                     left: 0,
@@ -97,10 +145,12 @@ export default function Layout() {
                 {!isMobile && (
                     <LiveChannelsButton
                         toggleSidebar={() => setOpen(prev => !prev)}
+                        dark={dark}
+                        isOpen={open}
                     />
                 )}
 
-                {shuffledStreams.map((stream, index) => (
+                {SidebarStreams.map((stream, index) => (
                     <SidebarItem
                         key={index}
                         avatar={stream.avatar}
@@ -122,6 +172,7 @@ export default function Layout() {
                     dark,
                     shuffledStreams,
                     shuffledGames,
+                    gameData,
                 }} />
             </div>
         </>

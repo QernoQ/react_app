@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { InputGroup, Form, Row, Col, Card, Button } from "react-bootstrap";
 import type { StreamerPanels, GamesPanels, ContextType } from "~/data/livePanel";
-import { RouterProvider, useOutletContext } from "react-router";
+import {useOutletContext } from "react-router";
 import StreamerCard from "../components/StreamerCard";
 import CategoryCard from "../components/CategoryCard";
 import LiveStreamCard from "~/components/LiveStreamCard";
+import EmblaCarousel from "../components/EmblaCarousel";
 const PanelList = () => {
     const {
         shuffledStreams,
@@ -15,28 +16,25 @@ const PanelList = () => {
         shuffledGames: GamesPanels[];
         dark: boolean;
     }>();
+    useEffect(() => {
+        document.title = "ObviouslyNotTwitch";
+    }, []);
     const [visibleCountStream, setVisibleCount] = useState(4);
     const [visibleCountGame, setVisibleCount2] = useState(6);
     const [visibleCountLiveStream, setVisibleCount3] = useState(8);
-    //const [search, setSearch] = useState('');
-
     const visibleStreams = shuffledStreams.slice(0, visibleCountStream);
     const visibleCategories = shuffledGames.slice(0, visibleCountGame);
-     const visibleLiveStreams = shuffledStreams.slice(0, visibleCountLiveStream);
+    const visibleLiveStreams = shuffledStreams.slice(0, visibleCountLiveStream);
 
     return (
+        
         <div className={`container-fluid text-center ${dark ? "panel-dark" : "panel-light"}`}>
             <div className="col-12"> </div>
             <Row id="liveStreamPanel">
-                {visibleLiveStreams.map((item, index) => (
-                <LiveStreamCard
-                key={index}
-                item={item}
-                dark={dark}
+                <EmblaCarousel
+                    streams={visibleLiveStreams}
+                    dark={dark}
                 />
-                
-         
-                ))}
             </Row>
             <Row id="streamerPanel">
                 <span
@@ -59,23 +57,19 @@ const PanelList = () => {
                 ))}
 
             </Row>
-            {visibleCountStream > 4 && (
+            {shuffledStreams.length > 4 && visibleCountStream <= 4 && (
                 <div className="mt-3">
-                    <Button variant={dark ? "dark" : "light"}
+                    <Button
+                        variant={dark ? "dark" : "light"}
                         className="btn btn-primary"
                         onClick={() => {
-                            if (visibleCountStream >= shuffledStreams.length) {
-                                setVisibleCount(4);
-                            } else {
-                                setVisibleCount(prev => prev + 4);
-                            }
+                            setVisibleCount(prev => prev + 4);
                         }}
                     >
-                        {visibleCountStream >= 8 ? 'Pokaż mniej' : 'Pokaż więcej'}
+                        Pokaż więcej
                     </Button>
                 </div>
             )}
-
             <Row id="gameCategory" className={dark ? "panel-dark" : "panel-light"}>
                 <span
                     className='d-flex align-items-center '

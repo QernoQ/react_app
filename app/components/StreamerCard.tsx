@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router";
 import { Col, Card } from "react-bootstrap";
 import type { StreamerPanels } from "~/data/livePanel";
+import StreamerHeader from './StreamerHeader';
 
 interface StremerCardProps {
     item: StreamerPanels;
@@ -9,6 +11,7 @@ interface StremerCardProps {
 
 const StreamerCard: React.FC<StremerCardProps> = ({ item, dark }) => {
     const [borderColor, setBorderColor] = useState('transparent');
+    const navigate = useNavigate();
     const getRandomColor = () => {
         const letters = '0123456789ABCDEF';
         let color = '#';
@@ -38,42 +41,12 @@ const StreamerCard: React.FC<StremerCardProps> = ({ item, dark }) => {
                         }}
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
+                            onClick={() => navigate(`/streamer/${encodeURIComponent(item.streamerName)}`)}
                             >
 
                     </Card.Img>
                 </div>
-                <div className="d-flex align-items-center gap-2 p-2">
-                    <div
-                        className="rounded-circle overflow-hidden flex-shrink-0"
-                        style={{
-                            width: '40px',
-                            height: '40px',
-                            backgroundColor: '#ccc',
-                        }}
-                    >
-                        <img
-                            src={item.avatar}
-                            alt={item.streamerName}
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                                display: 'block',
-                            }}
-
-                        />
-                    </div>
-
-                    <div className="w-100">
-                        <div className="d-flex justify-content-between align-items-center">
-                            <span className="fw-bold"> {item.streamerName} </span>
-                            <span className="d-flex align-items-center gap-2">
-                                <span>Live</span>
-                                //DODAC TYTUŁ
-                            </span>
-                        </div>
-                    </div>
-                </div>
+               <StreamerHeader avatar={item.avatar} streamerName={item.streamerName} title={item.title} viewers={item.viewers}></StreamerHeader>
             </div>
         </Col>
     );

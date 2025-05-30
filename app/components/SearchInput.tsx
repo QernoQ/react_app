@@ -12,7 +12,7 @@ export default function SearchInput({ value, onChange }: SearchProps) {
         aria-label="Search"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Search games..."
+        placeholder="Search streams.."
       />
       <InputGroup.Text>🔎</InputGroup.Text>
     </InputGroup>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router";
 import { Col, Card } from "react-bootstrap";
-import { href } from 'react-router';
 import type { GamesPanels } from "~/data/livePanel";
 
 function formatViewers(number: number): string | number {
@@ -19,6 +19,7 @@ interface CategoryCardProps {
 
 const CategoryCard: React.FC<CategoryCardProps> = ({ game, dark }) => {
     const [borderColor, setBorderColor] = useState('transparent');
+    const navigate = useNavigate();
     const getRandomColor = () => {
         const letters = '0123456789ABCDEF';
         let color = '#';
@@ -55,8 +56,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ game, dark }) => {
                     }}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
-                    onClick={(e) => { window.location.href = game.gameName }}
-
+                   onClick={() => navigate(`/category/${encodeURIComponent(game.gameName)}`)}
                 />
 
                 <p className="card-streamer">

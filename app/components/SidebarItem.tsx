@@ -1,4 +1,5 @@
 import React from 'react';
+import RedDot from "~/components/RedDot";
 
 interface SidebarItemProps {
   avatar: string;
@@ -55,15 +56,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           <div className="d-flex align-items-center justify-content-between">
             <span>{streamerName}</span>
             <span className="d-flex align-items-center gap-2">
-              <span
-                style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  backgroundColor: 'red',
-                  display: 'inline-block',
-                }}
-              ></span>
+              <RedDot></RedDot>
               <span>{formatViewers(viewers)}</span>
             </span>
           </div>

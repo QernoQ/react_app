@@ -3,26 +3,28 @@ import { Button } from 'react-bootstrap';
 
 interface LiveButtonProps {
     toggleSidebar: () => void;
+    dark: boolean;
+    isOpen: boolean;
 }
 
 
-const LiveChannelsButton = ({ toggleSidebar }: LiveButtonProps) => {
+const LiveChannelsButton: React.FC<LiveButtonProps> = ({ toggleSidebar, dark, isOpen }) => {
   return (
     <Button
-      variant="dark" 
-      className="d-flex align-items-center justify-content-between" 
-      style={{
-        width: 'auto', 
-        minWidth: '250px',
-        height: '60px', 
-        fontSize: '18px', 
-        fontWeight: 'bold', 
-        fontFamily: 'Helvetica, Arial, sans-serif',
-        color: 'white',
-      }}
+      variant={dark ? 'dark' : 'light'}
       onClick={toggleSidebar}
+      className="d-flex align-items-center"
+      style={{
+        width: isOpen ? 'auto' : '60px',
+        minWidth: isOpen ? '250px' : '60px',
+        height: '60px',
+        fontSize: '20px',
+        fontWeight: 'bold',
+        fontFamily: 'Helvetica, Arial, sans-serif',
+        transition: 'all 0.3s ease',
+      }}
     >
-      LIVE CHANNELS
+      {isOpen ? (<>LIVE CHANNELS <span style={{ marginLeft: '70px' }}>🡰</span></>) : ('🡲')}
     </Button>
   );
 };
