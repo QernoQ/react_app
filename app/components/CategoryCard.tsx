@@ -17,7 +17,7 @@ interface CategoryCardProps {
     dark: boolean;
 };
 
-const CategoryCard: React.FC<CategoryCardProps> = ({ game, dark }) => {
+export default function CategoryCard({ game, dark } : CategoryCardProps){
     const [borderColor, setBorderColor] = useState('transparent');
     const navigate = useNavigate();
     const getRandomColor = () => {
@@ -95,5 +95,3 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ game, dark }) => {
         </Col>
     );
 };
-
-export default CategoryCard;

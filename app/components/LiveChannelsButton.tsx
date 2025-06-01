@@ -8,7 +8,7 @@ interface LiveButtonProps {
 }
 
 
-const LiveChannelsButton: React.FC<LiveButtonProps> = ({ toggleSidebar, dark, isOpen }) => {
+export default function LiveChannelsButton ({ toggleSidebar, dark, isOpen } : LiveButtonProps) {
   return (
     <Button
       variant={dark ? 'dark' : 'light'}
@@ -28,5 +28,3 @@ const LiveChannelsButton: React.FC<LiveButtonProps> = ({ toggleSidebar, dark, is
     </Button>
   );
 };
-
-export default LiveChannelsButton;

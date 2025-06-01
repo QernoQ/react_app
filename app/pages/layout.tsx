@@ -2,15 +2,16 @@
 
 import { Outlet } from 'react-router';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect, useMemo } from 'react';
-import { Nav, InputGroup, Form, NavDropdown, Button, Container } from 'react-bootstrap';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { Nav, NavDropdown, Container, Button } from 'react-bootstrap';
 import { originalStreams } from "~/data/streamerData";
 import SidebarItem from '~/components/SidebarItem';
-import { type GamesPanels, type StreamerPanels } from "~/data/livePanel";
 import { gameData } from '~/data/gameData';
 import SearchInput from "~/components/SearchInput";
 import DarkModeSwitch from "~/components/DarkModeSwitch";
 import LiveChannelsButton from "~/components/LiveChannelsButton";
+import StreamerHeader from '~/components/StreamerHeader';
+import LoginForm from '~/components/LoginForm';
 
 export default function Layout() {
     const [search, setSearch] = useState('');
@@ -18,6 +19,14 @@ export default function Layout() {
     const [dark, setDark] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
     const navigate = useNavigate();
+    const topRef = useRef<HTMLDivElement>(null);
+    const shuffledStreams = useMemo(() => shuffleArray(originalStreams), [originalStreams]);
+    const [visibleCountStream, setVisibleCount] = useState(13);
+    const shuffledGames = useMemo(() => shuffleArray(gameData), [gameData]);
+    const SidebarStreams = shuffledStreams.slice(0, visibleCountStream);
+    const [logoScale, setLogoScale] = useState('scale(1)');
+    const [browseScale, setBrowseScale] = useState('18px');
+    const [openMenu, setOpenMenu] = useState(false);
 
     function shuffleArray<T>(array: T[]): T[] {
         const result = [...array];
@@ -28,12 +37,10 @@ export default function Layout() {
         return result;
     }
 
-    const shuffledStreams = useMemo(() => shuffleArray(originalStreams), [originalStreams]);
-    const [visibleCountStream, setVisibleCount] = useState(13);
-    const shuffledGames = useMemo(() => shuffleArray(gameData), [gameData]);
-    const SidebarStreams = shuffledStreams.slice(0, visibleCountStream);
-    const [logoScale, setLogoScale] = useState('scale(1)');
-    const [browseScale, setBrowseScale] = useState('18px');
+    const handleLogoClick = () => {
+        topRef.current?.scrollIntoView({ behavior: 'smooth' });
+        navigate('/');
+    };
 
     const filteredStreams = originalStreams.filter(item =>
         item.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -41,14 +48,12 @@ export default function Layout() {
     );
 
 
-    //zapiuje na dysku
     useEffect(() => {
         const stored = localStorage.getItem("darkMode");
         if (stored !== null) {
             setDark(stored === "true");
         }
     }, []);
-    //zmienia wielkosc jak jest wielkosci telefonu
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth < 1200);
@@ -58,7 +63,6 @@ export default function Layout() {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-    //switch dark on/of (aktualizuje)
     useEffect(() => {
         document.body.setAttribute("data-bs-theme", dark ? "dark" : "light");
         localStorage.setItem("darkMode", dark.toString());
@@ -85,7 +89,7 @@ export default function Layout() {
             <header className={`p-3 ${dark ? "bg-dark" : "bg-light"} sticky-top shadow-sm`} style={{ zIndex: 1050 }}>
                 <Container fluid>
                     <Nav className="align-items-center flex-wrap justify-content-center">
-                        <Nav.Item className='' onClick={() => navigate('/')}>
+                        <Nav.Item className='' onClick={handleLogoClick}>
                             <img
                                 src="https://i.imgur.com/QEjtBUF.png"
                                 alt="LOGO"
@@ -111,26 +115,81 @@ export default function Layout() {
                                 onMouseEnter={handleMouseEnter2}
                                 onMouseLeave={handleMouseLeave2}>Browse</span>
                         </Nav.Item>
-                        <Nav.Item>
+                        <Nav.Item style={{ flex: 1, position: 'relative' }}>
                             <SearchInput
                                 value={search}
                                 onChange={setSearch}
+                                barmsg="Search streams..."
                             />
+
+                            {search && (
+                                <div
+                                    className={`position-absolute start-0 top-100 mt-2 p-3 shadow rounded ${dark ? "bg-dark text-white" : "bg-light text-dark"}`}
+                                    style={{
+                                        width: '100%',
+                                        maxHeight: '60vh',
+                                        overflowY: 'auto',
+                                        zIndex: 1040,
+                                        border: !dark ? '1px solid #dee2e6' : 'none',
+                                    }}
+                                >
+                                    {filteredStreams.length > 0 ? (
+                                        filteredStreams.map((item, index) => (
+                                            <div
+                                                key={index}
+                                                className="searchItem py-2 border-bottom"
+                                                onClick={() => {
+                                                    navigate(`/streamer/${encodeURIComponent(item.streamerName)}`);
+                                                    setSearch('');
+                                                }}
+                                            >
+                                                <StreamerHeader
+                                                    avatar={item.avatar}
+                                                    streamerName={item.streamerName}
+                                                    title={item.title}
+                                                    viewers={item.viewers}
+                                                />
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div>No results found</div>
+                                    )}
+                                </div>
+                            )}
                         </Nav.Item>
-                        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">🌙 Action</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">🌙 Another action</NavDropdown.Item>
+                        <Nav.Item
+                            style={{
+                                marginLeft: '16px'
+                            }}>
+                            <Button
+                                variant={dark ? "dark" : "light"}
+                                onClick={() => {
+                                    setOpenMenu(open => !open);
+                                    setOpen(open => !open);
+                                }}>
+                                Log In
+                            </Button>
+                        </Nav.Item>
+
+                        <NavDropdown
+                            title={
+                                <img
+                                    src={"public/person.ico"}
+                                    alt="User"
+                                    width="32"
+                                    height="32"
+                                />
+                            }
+                        >
+                            <NavDropdown.Item href="">🕶 Profile</NavDropdown.Item>
                             <NavDropdown.Item as="div" className="d-flex align-items-center">
                                 <DarkModeSwitch dark={dark} toggleDark={() => setDark(prev => !prev)} />
                             </NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                 </Container>
             </header>
-
-            {/* Sidebar */}
+                <LoginForm dark={dark} openMenu={openMenu}></LoginForm>
             <div
                 className={`d-flex flex-column position-fixed vh-100 pt-3 ${dark ? "bg-dark text-white" : "bg-light text-dark"}`}
                 style={{
@@ -149,7 +208,6 @@ export default function Layout() {
                         isOpen={open}
                     />
                 )}
-
                 {SidebarStreams.map((stream, index) => (
                     <SidebarItem
                         key={index}
@@ -173,8 +231,20 @@ export default function Layout() {
                     shuffledStreams,
                     shuffledGames,
                     gameData,
+                    topRef,
                 }} />
             </div>
+            <footer>
+                <span className='d-flex justify-content-end'
+                    style={{
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        fontFamily: 'Helvetica, Arial, sans-serif',
+                    }}>
+                    Copyright © 2025 | Patryk Bocheński | All rights reserved
+                </span>
+            </footer>
+
         </>
     );
 

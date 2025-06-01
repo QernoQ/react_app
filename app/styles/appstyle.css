@@ -11,6 +11,19 @@
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+.searchItem {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+[data-bs-theme="dark"] .searchItem:hover{
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="light"] .searchItem:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
 .panel-dark {
   background-color: #0d0d0d;
   border-radius: 8px;
@@ -96,4 +109,7 @@
   text-align: center;
   gap: 2rem;
   margin-top: 1rem;
+}
+.dropdown-toggle::after {
+  display: none;
 }

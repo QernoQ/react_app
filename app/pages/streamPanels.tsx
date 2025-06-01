@@ -1,20 +1,21 @@
-import { useEffect, useState } from "react";
-import { InputGroup, Form, Row, Col, Card, Button } from "react-bootstrap";
-import type { StreamerPanels, GamesPanels, ContextType } from "~/data/livePanel";
-import {useOutletContext } from "react-router";
+import { useEffect, useState, } from "react";
+import { Row, Button } from "react-bootstrap";
+import type { StreamerPanels, GamesPanels, } from "~/data/livePanel";
+import { useOutletContext } from "react-router";
 import StreamerCard from "../components/StreamerCard";
 import CategoryCard from "../components/CategoryCard";
-import LiveStreamCard from "~/components/LiveStreamCard";
 import EmblaCarousel from "../components/EmblaCarousel";
 const PanelList = () => {
     const {
         shuffledStreams,
         shuffledGames,
         dark,
+        topRef,
     } = useOutletContext<{
         shuffledStreams: StreamerPanels[];
         shuffledGames: GamesPanels[];
         dark: boolean;
+        topRef: React.RefObject<HTMLDivElement>;
     }>();
     useEffect(() => {
         document.title = "ObviouslyNotTwitch";
@@ -27,8 +28,8 @@ const PanelList = () => {
     const visibleLiveStreams = shuffledStreams.slice(0, visibleCountLiveStream);
 
     return (
-        
-        <div className={`container-fluid text-center ${dark ? "panel-dark" : "panel-light"}`}>
+
+        <div ref={topRef} className={`container-fluid text-center ${dark ? "panel-dark" : "panel-light"}`}>
             <div className="col-12"> </div>
             <Row id="liveStreamPanel">
                 <EmblaCarousel
@@ -61,9 +62,11 @@ const PanelList = () => {
                 <div className="mt-3">
                     <Button
                         variant={dark ? "dark" : "light"}
-                        className="btn btn-primary"
                         onClick={() => {
                             setVisibleCount(prev => prev + 4);
+                        }}
+                        style={{
+                            border: !dark ? '1px solid #dee2e6' : 'none',
                         }}
                     >
                         Pokaż więcej

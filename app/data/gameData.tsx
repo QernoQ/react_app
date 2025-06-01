@@ -9,12 +9,6 @@ export const gameData: GamesPanels[] = [
     gameTags: [TagEnum.casual, TagEnum.moba,]
   },
   {
-    gameImage: "https://static-cdn.jtvnw.net/ttv-boxart/Grand%20Theft%20Auto%20V.jpg",
-    gameName: CategoryTypeEnum.grandTheftAutoV,
-    gameViewers: 106530,
-    gameTags: [TagEnum.competitive],
-  },
-  {
     gameImage: "https://static-cdn.jtvnw.net/ttv-boxart/League%20of%20Legends.jpg",
     gameName: CategoryTypeEnum.leagueOfLegends,
     gameViewers: 87397,
@@ -45,7 +39,7 @@ export const gameData: GamesPanels[] = [
     gameTags: [TagEnum.battleRoyale, TagEnum.fps],
   },
   {
-    gameImage: "https://static-cdn.jtvnw.net/ttv-boxart/Counter-Strike.jpg",
+    gameImage: "https://static-cdn.jtvnw.net/ttv-boxart/32399-285x380.jpg",
     gameName: CategoryTypeEnum.counterStrike,
     gameViewers: 80100,
     gameTags: [TagEnum.fps, TagEnum.competitive],
@@ -111,12 +105,6 @@ export const gameData: GamesPanels[] = [
     gameTags: [TagEnum.rpg, TagEnum.sciFi],
   },
   {
-    gameImage: "https://static-cdn.jtvnw.net/ttv-boxart/Just%20Chatting.jpg",
-    gameName: CategoryTypeEnum.justChatting,
-    gameViewers: 42098,
-    gameTags: [TagEnum.casual, TagEnum.irl],
-  },
-  {
     gameImage: "https://static-cdn.jtvnw.net/ttv-boxart/Grand%20Theft%20Auto%20V.jpg",
     gameName: CategoryTypeEnum.grandTheftAutoV,
     gameViewers: 106530,
@@ -133,12 +121,6 @@ export const gameData: GamesPanels[] = [
     gameName: CategoryTypeEnum.valorant,
     gameViewers: 22280,
     gameTags: [TagEnum.fps, TagEnum.competitive,]
-  },
-  {
-    gameImage: "https://static-cdn.jtvnw.net/ttv-boxart/Fortnite.jpg",
-    gameName: CategoryTypeEnum.fortnite,
-    gameViewers: 76237,
-    gameTags: [TagEnum.battleRoyale, TagEnum.tps,]
   },
    {
     gameImage: "https://static-cdn.jtvnw.net/ttv-boxart/Call%20of%20Duty.jpg",

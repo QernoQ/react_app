@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { StreamerPanels } from "~/data/livePanel";
 
 interface LiveStreamCardProps {
@@ -6,10 +6,16 @@ interface LiveStreamCardProps {
     dark: boolean;
     height: string;
     width: string;
+    mute: boolean;
 }
 
-const LiveStreamCard: React.FC<LiveStreamCardProps> = ({ item, dark, height, width }) => {
+export default function LiveStreamCard({ item, dark, height, width, mute }: LiveStreamCardProps)  {
     const [showControls, setShowControls] = useState(false);
+    const [muted, setMuted] = useState(true);
+
+    useEffect(() => {
+        setMuted(mute);
+    }, [mute]);
 
     return (
         <div
@@ -25,7 +31,7 @@ const LiveStreamCard: React.FC<LiveStreamCardProps> = ({ item, dark, height, wid
                     height: "100%",
                     objectFit: "cover"
                 }}
-                muted
+                muted={muted}
                 loop
                 autoPlay
                 playsInline
@@ -39,4 +45,3 @@ const LiveStreamCard: React.FC<LiveStreamCardProps> = ({ item, dark, height, wid
     );
 };
 
-export default LiveStreamCard;

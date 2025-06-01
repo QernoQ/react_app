@@ -9,7 +9,7 @@ interface StremerCardProps {
     dark: boolean;
 };
 
-const StreamerCard: React.FC<StremerCardProps> = ({ item, dark }) => {
+export default function StreamerCard ({ item, dark }: StremerCardProps){
     const [borderColor, setBorderColor] = useState('transparent');
     const navigate = useNavigate();
     const getRandomColor = () => {
@@ -52,4 +52,3 @@ const StreamerCard: React.FC<StremerCardProps> = ({ item, dark }) => {
     );
 };
 
-export default StreamerCard;

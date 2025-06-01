@@ -16,7 +16,7 @@ function formatViewers(number: number): string | number {
     }
     return number;
 }
-const StreamerHeader: React.FC<StreamerHeaderProps> = ({ avatar, streamerName, title, viewers }) => {
+export default function StreamerHeader({ avatar, streamerName, title, viewers }:StreamerHeaderProps) {
     return (
         <div className="d-flex align-items-center gap-2 p-2">
             <div
@@ -50,4 +50,3 @@ const StreamerHeader: React.FC<StreamerHeaderProps> = ({ avatar, streamerName, t
     );
 };
 
-export default StreamerHeader;

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { use } from 'react';
 import RedDot from "~/components/RedDot";
+import { useNavigate } from 'react-router-dom';
 
 interface SidebarItemProps {
   avatar: string;
@@ -19,16 +20,13 @@ function formatViewers(number: number): string | number {
   return number;
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({
-  avatar,
-  streamerName,
-  viewers,
-  category,
-  isOpen,
-  isMobile,
-}) => {
+export default function SidebarItem({avatar,streamerName,viewers,category,isOpen,isMobile,
+}: SidebarItemProps) {
+  const navigate = useNavigate();
   return (
-    <div className="d-flex align-items-center p-2 sidebar-item">
+    <div className="d-flex align-items-center p-2 sidebar-item"
+    onClick={() => navigate(`/streamer/${encodeURIComponent(streamerName)}`)}
+    >
       <div
         className="flex-shrink-0 rounded-circle overflow-hidden"
         style={{
@@ -70,4 +68,3 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   );
 };
 
-export default SidebarItem;
