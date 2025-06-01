@@ -12,6 +12,7 @@ import DarkModeSwitch from "~/components/DarkModeSwitch";
 import LiveChannelsButton from "~/components/LiveChannelsButton";
 import StreamerHeader from '~/components/StreamerHeader';
 import LoginForm from '~/components/LoginForm';
+import DescriptionForm from '~/components/DescriptionForm';
 
 export default function Layout() {
     const [search, setSearch] = useState('');
@@ -27,6 +28,9 @@ export default function Layout() {
     const [logoScale, setLogoScale] = useState('scale(1)');
     const [browseScale, setBrowseScale] = useState('18px');
     const [openMenu, setOpenMenu] = useState(false);
+    const [openinfo, setOpenInfo] = useState(false);
+    const [login, setLogin] = useState('');
+    const [info, setInfo] = useState('');
 
     function shuffleArray<T>(array: T[]): T[] {
         const result = [...array];
@@ -46,12 +50,20 @@ export default function Layout() {
         item.title.toLowerCase().includes(search.toLowerCase()) ||
         item.streamerName.toLowerCase().includes(search.toLowerCase())
     );
-
-
     useEffect(() => {
-        const stored = localStorage.getItem("darkMode");
-        if (stored !== null) {
-            setDark(stored === "true");
+        const savedInfo = localStorage.getItem("info");
+        const savedLogin = localStorage.getItem("login");
+        const storedDarkMode = localStorage.getItem("darkMode");
+
+        if (savedInfo) {
+            setInfo(savedInfo);
+        } 
+        if (savedLogin) {
+            setLogin(savedLogin);
+        }
+
+        if (storedDarkMode !== null) {
+            setDark(storedDarkMode === "true");
         }
     }, []);
     useEffect(() => {
@@ -157,39 +169,61 @@ export default function Layout() {
                                 </div>
                             )}
                         </Nav.Item>
-                        <Nav.Item
-                            style={{
-                                marginLeft: '16px'
-                            }}>
-                            <Button
-                                variant={dark ? "dark" : "light"}
-                                onClick={() => {
-                                    setOpenMenu(open => !open);
-                                    setOpen(open => !open);
+                        {login === '' && (
+                            <Nav.Item
+                                style={{
+                                    marginLeft: '16px'
                                 }}>
-                                Log In
-                            </Button>
-                        </Nav.Item>
-
+                                <Button
+                                    variant={dark ? "dark" : "light"}
+                                    onClick={() => {
+                                        setOpenMenu(open => !open);
+                                        setOpen(open => !open);
+                                    }}>
+                                    Log In
+                                </Button>
+                            </Nav.Item>
+                        )}
                         <NavDropdown
                             title={
                                 <img
-                                    src={"public/person.ico"}
+                                    src={"https://i.imgur.com/gdkiJTZ.png"}
                                     alt="User"
                                     width="32"
                                     height="32"
                                 />
                             }
                         >
-                            <NavDropdown.Item href="">🕶 Profile</NavDropdown.Item>
+                            <NavDropdown.Divider></NavDropdown.Divider>
+                            {login !== '' && (
+                                <>
+                                    <NavDropdown.Item href="" onClick={() => navigate(`/profile/${encodeURIComponent(login)}`)}> 🕶 User: {login}</NavDropdown.Item>
+                                    <NavDropdown.Item  onClick={() => {
+                                        setOpenInfo(true);
+                                        setOpen(false);
+                                    }}>
+                                        📋 Change Description</NavDropdown.Item>
+                                    <NavDropdown.Item
+                                        onClick={() => {
+                                                setLogin('')
+                                                localStorage.setItem("login", '')
+                                                localStorage.setItem("description", '')
+                                            }}
+                                    >
+                                        🔚 Log Out
+                                    </NavDropdown.Item>
+
+                                </>
+                            )}
                             <NavDropdown.Item as="div" className="d-flex align-items-center">
                                 <DarkModeSwitch dark={dark} toggleDark={() => setDark(prev => !prev)} />
                             </NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                 </Container>
-            </header>
-                <LoginForm dark={dark} openMenu={openMenu}></LoginForm>
+            </header >
+            <LoginForm dark={dark} openMenu={openMenu} loginValue={login} setLoginValue={setLogin} setOpenMenu={setOpenMenu} setOpen={setOpen} ></LoginForm>
+            <DescriptionForm dark={dark} openInfo={openinfo} info={info} setInfo={setInfo} setOpenInfo={setOpenInfo} setOpen={setOpen}></DescriptionForm>
             <div
                 className={`d-flex flex-column position-fixed vh-100 pt-3 ${dark ? "bg-dark text-white" : "bg-light text-dark"}`}
                 style={{
@@ -232,6 +266,7 @@ export default function Layout() {
                     shuffledGames,
                     gameData,
                     topRef,
+                    info,
                 }} />
             </div>
             <footer>

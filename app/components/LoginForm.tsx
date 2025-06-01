@@ -1,42 +1,72 @@
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import {Button, Form} from 'react-bootstrap';
+import { FocusTrap } from 'focus-trap-react';
+import { useState } from 'react';
+
 interface LoginProp {
-    dark: boolean,
-    openMenu: boolean,
+    dark: boolean;
+    openMenu: boolean;
+    loginValue: string;
+    setLoginValue: (value: string) => void;
+    setOpenMenu: (value: boolean) => void;
+    setOpen: (value: boolean) => void;
 }
 
-function LoginForm({dark,openMenu} : LoginProp) {
-    return (
-        <Form className={`position-fixed ${dark ? "bg-dark text-white" : "bg-light text-dark"}`}
-            style={{
-                top: '50%',
-                left: '50%',
-                opacity: openMenu ? 1 : 0,
-                transition: 'opacity 0.3s ease',
-                zIndex: 1050,
-                borderRight: !dark ? '1px solid #dee2e6' : 'none',
-                padding: '16px',
-            }}>
-            <span>Log In to ObviouslyNotTwitch</span>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" />
-                <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
-                </Form.Text>
-            </Form.Group>
+function LoginForm({ dark, openMenu, loginValue, setLoginValue, setOpen, setOpenMenu }: LoginProp) {
+    if (!openMenu) return null;
+    const [error,setError] = useState('');
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-        </Form>
+    return (
+        <FocusTrap>
+            <Form
+                className={` d-flex flex-column items-aling-center justify-content-center position-fixed shadow-lg rounded ${dark ? "bg-dark text-white" : "bg-light text-dark"}`}
+                style={{
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    opacity: 1,
+                    transition: 'opacity 0.3s ease',
+                    zIndex: 1050,
+                    border: !dark ? '1px solid #dee2e6' : 'none',
+                    padding: '24px',
+                    minWidth: '300px',
+                    minHeight: '300px'
+                }}
+            >
+                <h4 className="mb-3">Log In to ObviouslyNotTwitch</h4>
+
+                <Form.Group className="mb-3" controlId="formBasicLogin">
+                    <Form.Label>Login</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter login"
+                        autoFocus
+                        value={loginValue}
+                        onChange={(e) => setLoginValue(e.target.value)}
+                    />
+                    {error && <Form.Text className="text-danger">{error}</Form.Text>}
+                </Form.Group>
+                <Button variant={dark ? "dark" : "light"} type="submit" onClick={(e) => {
+                    e.preventDefault();
+                    if(loginValue.trim() === '')
+                    {
+                        setError('Login cannot be empty!')
+                        return;
+                    }
+                    setError('');
+                    setOpenMenu(false);
+                    setOpen(true);
+                    localStorage.setItem("login", loginValue);
+                }}>
+                    Log in
+                </Button>
+                <Button variant={dark ? "dark" : "light"} onClick={() => {
+                    setOpenMenu(false);
+                    setOpen(true);
+                }}>
+                    Close
+                </Button>
+            </Form>
+        </FocusTrap>
     );
 }
 

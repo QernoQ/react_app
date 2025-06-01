@@ -305,7 +305,7 @@ export const originalStreams: StreamerPanels[] = [
     {
         title: "OD MILIONERA DO ZERA XD",
         streamerName: "Qami44",
-        viewers: 5200,
+        viewers: 2,
         category: CategoryTypeEnum.counterStrike,
         language: LanguageEnum.polish,
         video: "/videos/ptasznik.mp4",
