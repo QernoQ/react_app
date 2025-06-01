@@ -177,8 +177,8 @@ export default function Layout() {
                                 <Button
                                     variant={dark ? "dark" : "light"}
                                     onClick={() => {
-                                        setOpenMenu(open => !open);
-                                        setOpen(open => !open);
+                                        setOpenMenu(true);
+                                        setOpen(false);
                                     }}>
                                     Log In
                                 </Button>
@@ -206,8 +206,10 @@ export default function Layout() {
                                     <NavDropdown.Item
                                         onClick={() => {
                                                 setLogin('')
+                                                setInfo('')
                                                 localStorage.setItem("login", '')
-                                                localStorage.setItem("description", '')
+                                                localStorage.setItem("info", '')
+                                                navigate('/')
                                             }}
                                     >
                                         🔚 Log Out
