@@ -15,6 +15,7 @@ export default function DescriptionForm({ dark, openInfo, info, setInfo, setOpen
     if (!openInfo) return null;
 
     return (
+        <FocusTrap>
         <Form
             className={`d-flex flex-column align-items-center justify-content-center position-fixed shadow-lg rounded ${dark ? 'bg-dark text-white' : 'bg-light text-dark'}`}
             style={{
@@ -67,5 +68,6 @@ export default function DescriptionForm({ dark, openInfo, info, setInfo, setOpen
                 </Button>
             </div>
         </Form>
+        </FocusTrap>
     );
 }

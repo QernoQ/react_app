@@ -1,6 +1,7 @@
 import { useParams } from "react-router";
 import { Col, Card, Row, Container } from "react-bootstrap";
 import { useOutletContext } from "react-router";
+import { useEffect } from "react";
 
 export default function ProfilePage() {
     const { dark, info } = useOutletContext<{
@@ -9,6 +10,11 @@ export default function ProfilePage() {
     }>();
     const { profileId } = useParams<{ profileId: string }>();
     const decodedlogin = decodeURIComponent(profileId || '');
+
+     useEffect(() => {
+            document.title = `${decodedlogin} - ObviouslyNotTwitch`;
+        }, []);
+    
 
     return (
         <Container fluid className={`py-4 ${dark ? "bg-dark text-white" : "bg-light text-dark"}`} style={{ minHeight: '100vh' }}>
